@@ -124,7 +124,7 @@ De verschillende niet-functionele eisen worden gesorteerd op hoe cruciaal deze z
 erDiagram
 
 Movie{
-	string(UUID) ID
+	string(UUID) ID PK
 	string title
 	datetime release
 	string studio
@@ -134,23 +134,23 @@ Movie{
 }
 
 Genre{
-	string(UUID) ID
+	string(UUID) ID PK
 	string name
 }
 
 Movie_Genre{
-	string(UUID) ID
+	string(UUID) ID PK
 	int MovieID FK
 	int GenreID FK
 }
 
 MediaType{
-	string(UUID) ID
+	string(UUID) ID PK
 	string title
 }
 
 MediaType_Movie{
-	string(UUID) ID
+	string(UUID) ID PK
 	string name
 }
 
