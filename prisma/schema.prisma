@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+// Base Prisma schema generated with local qwen3:14b LLM model. Verified and adjusted by Tycho Doorman.
+
+enum PackageType {
+  CASE
+  SLIPCOVER
+  STEELBOOK
+  FUTUREPAK
+  BOXSET
+  DISC
+}
+
+model Movie {
+  id          String              @id @default(uuid())
+  title       String
+  release     DateTime
+  studio      String
+  rating      Int
+  EAN         Int
+  packageType PackageType
+  Genre       MovieOnGenre[]      @relation("MovieToGenre")
+  mediaTypes  MediaTypeOnMovies[] @relation("MovieToMediaType")
+}
+
+model Genre {
+  id     String         @id @default(uuid())
+  name   String
+  movies MovieOnGenre[] @relation("GenreToMovie")
+}
+
+model MovieOnGenre {
+  id      String @id @default(uuid())
+  movie   Movie  @relation("MovieToGenre", fields: [movieId], references: [id])
+  movieId String
+  genre   Genre  @relation("GenreToMovie", fields: [genreId], references: [id])
+  genreId String
+}
+
+model MediaType {
+  id              String              @id @default(uuid())
+  title           String
+  mediaTypeMovies MediaTypeOnMovies[] @relation("MediaTypeToMediaTypeMovie")
+}
+
+model MediaTypeOnMovies {
+  id          String    @id @default(uuid())
+  movie       Movie     @relation("MovieToMediaType", fields: [movieId], references: [id])
+  movieId     String
+  mediaType   MediaType @relation("MediaTypeToMediaTypeMovie", fields: [mediaTypeId], references: [id])
+  mediaTypeId String
+}
